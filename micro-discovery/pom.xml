@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+		<groupId>br.com.zenganet</groupId>
+  		<artifactId>micro-parent</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../micro-parent</relativePath>
+	</parent>
+
+	<artifactId>micro-discovery</artifactId>
+	<name>micro-discovery</name>
+	<packaging>jar</packaging>
+	<description>Projeto responsavel por mapear todos os serviço.</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+		</dependency>		
+	</dependencies>
+	
+	<build>
+		<finalName>micro-discovery</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<configuration>
+							<mainClass>br.com.zenganet.discovery.MicroDiscoveryApplication</mainClass>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	
+	<properties>
+		<start-class>br.com.zenganet.discovery.MicroDiscoveryApplication</start-class>
+	</properties>
+
+</project>

@@ -1,0 +1,61 @@
+
+spring:
+   profiles:
+      active: ${ENVIRONMENT} #production #development
+   application:
+      name: pessoa
+
+
+   devtools:
+      livereload:
+         port: 35734
+
+
+# Database
+   datasource:
+      driver-class-name: org.postgresql.Driver
+      url: jdbc:postgresql://192.168.1.10:5432/micro-cadastro
+      username: postgres
+      password: admin
+
+
+# JPA properties
+   jpa:
+      database: POSTGRESQL    
+      show-sql: true
+ #     hibernate:
+ #        ddl-auto: update
+      properties:
+         hibernate:
+            temp:
+               use_jdbc_metadata_defaults: false
+            
+
+   jackson:
+      date-format: yyyy-MM-dd
+      deserialization:
+         fail-on-unknown-properties: true
+
+
+# Logger configuration
+logging:
+   pattern:
+      console: "%d %-5level %logger : %msg%n"
+   level:
+      org:
+         springframework: DEBUG
+         hibernate: DEBUG
+
+
+server:
+   port: 8085
+   
+
+eureka:
+   instance:
+      prefer-ip-address: true
+   client:
+      register-with-eureka: true
+      fetch-registry: true
+      service-url:
+         defaultZone: http://localhost:8081/eureka/

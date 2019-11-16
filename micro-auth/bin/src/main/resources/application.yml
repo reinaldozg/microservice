@@ -1,0 +1,51 @@
+spring:
+   profiles:
+      active: ${ENVIRONMENT} #production #development
+   application:
+      name: auth
+
+# Database
+   datasource:
+      driver-class-name: org.postgresql.Driver
+      url: jdbc:postgresql://localhost:5432/auth
+      username: postgres
+      password: admin
+    
+# JPA properties
+   jpa:
+      database: POSTGRESQL    
+      show-sql: true
+      properties:
+         hibernate:
+            temp:
+               use_jdbc_metadata_defaults: false
+
+
+   jackson:
+      date-format: yyyy-MM-dd
+      deserialization:
+         fail-on-unknown-properties: true
+
+
+# Logger configuration
+logging:
+   pattern:
+      console: "%d %-5level %logger : %msg%n"
+   level:
+      org:
+         springframework: INFO
+         hibernate: DEBUG
+
+
+server:
+   port: 8082
+   sessionTimeout: 30
+
+eureka:
+   instance:
+      prefer-ip-address: true
+   client:
+      register-with-eureka: true
+      fetch-registry: true
+      service-url:
+         defaultZone: http://localhost:8081/eureka/
