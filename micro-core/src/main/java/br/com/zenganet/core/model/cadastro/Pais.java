@@ -14,17 +14,17 @@ public class Pais implements Serializable {
 	private static final long serialVersionUID = -6930516543505735503L;
 
 	@Id
-	private int id;
+	private Integer id;
 	@Column(length = 60)
 	private String nome;
 	@Column(length = 5)
 	private String sigla;
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

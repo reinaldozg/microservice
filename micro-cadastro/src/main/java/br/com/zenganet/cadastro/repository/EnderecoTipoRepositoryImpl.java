@@ -2,6 +2,7 @@ package br.com.zenganet.cadastro.repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -21,10 +22,16 @@ import br.com.zenganet.core.model.cadastro.EnderecoTipo;
 import br.com.zenganet.core.model.cadastro.filter.EnderecoTipoFilter;
 
 
-public class EnderecoTipoRepositoryImpl implements PesquisaRepositoryQuery<EnderecoTipo, EnderecoTipoFilter>{
+public class EnderecoTipoRepositoryImpl implements PesquisaRepositoryQuery<EnderecoTipo,Long, EnderecoTipoFilter>{
 
 	@PersistenceContext
 	private EntityManager manager;
+	
+	@Override
+	public Optional<EnderecoTipo> pesquisar(Long pk) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	@Override
 	public Page<EnderecoTipo> pesquisar(EnderecoTipoFilter filter, Pageable pageable) {
@@ -46,6 +53,8 @@ public class EnderecoTipoRepositoryImpl implements PesquisaRepositoryQuery<Ender
 					"%" + filter.getDescricao().toLowerCase() + "%"));
 		}
 		
+		predicates.add(builder.equal(root.get("controle").get("excluido"), false));
+		
 		return predicates.toArray(new Predicate[predicates.size()]);
 	}
 
@@ -66,4 +75,6 @@ public class EnderecoTipoRepositoryImpl implements PesquisaRepositoryQuery<Ender
 		criteria.select(builder.count(root));
 		return manager.createQuery(criteria).getSingleResult();
 	}
+
+
 }

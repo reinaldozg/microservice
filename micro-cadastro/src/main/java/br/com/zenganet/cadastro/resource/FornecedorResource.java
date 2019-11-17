@@ -20,43 +20,49 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.zenganet.cadastro.resource.interfaces.IPesquisaResource;
+import br.com.zenganet.cadastro.resource.interfaces.IRemoveResource;
+import br.com.zenganet.cadastro.resource.interfaces.ISalvaResource;
 import br.com.zenganet.cadastro.service.FornecedorService;
 import br.com.zenganet.core.model.cadastro.Fornecedor;
 import br.com.zenganet.core.model.cadastro.filter.FornecedorFilter;
 
 @RestController
 @RequestMapping("/fornecedores")
-public class FornecedorResource {
+public class FornecedorResource 
+	implements 
+		IPesquisaResource<Fornecedor, Long, FornecedorFilter>,
+		ISalvaResource<Fornecedor, Long>,
+		IRemoveResource<Long>{
 
 	@Autowired
 	private FornecedorService fornecedorService;
 	
-	@GetMapping("/{codigo}")
+	@Override @GetMapping("/{codigo}")
 	public ResponseEntity<Fornecedor> pesquisar(@PathVariable Long codigo) {
 		Optional<Fornecedor> fornecedor = fornecedorService.pesquisar(codigo);
 		return fornecedor.isPresent() ? ResponseEntity.ok(fornecedor.get()) : ResponseEntity.notFound().build();
 	}
 	
-	@GetMapping
+	@Override @GetMapping
 	public ResponseEntity<Page<Fornecedor>> pesquisar(FornecedorFilter filtro, Pageable pageable) {
 		Page<Fornecedor> fornecedores = fornecedorService.pesquisar(filtro, pageable);
 		return fornecedores.getTotalElements() > 0 ? ResponseEntity.ok(fornecedores) : ResponseEntity.notFound().build();
 	}
 	
-	@PostMapping	
+	@Override @PostMapping	
 	public ResponseEntity<Fornecedor> inserir(@Valid @RequestBody Fornecedor fornecedor, HttpServletResponse response) {
 		Fornecedor entitySalvo = fornecedorService.inserir(fornecedor);		
 		return ResponseEntity.status(HttpStatus.CREATED).body(entitySalvo);
 	}
 
-	@PutMapping("/{codigo}")
+	@Override @PutMapping("/{codigo}")
 	public ResponseEntity<Fornecedor> atualizar(@PathVariable Long codigo, @Valid @RequestBody Fornecedor fornecedor,	HttpServletResponse response) {
 		Fornecedor fornecedorAtualizado = fornecedorService.atualizar(codigo, fornecedor);
 		return ResponseEntity.ok(fornecedorAtualizado);
 	}
 	
-	@DeleteMapping("/{codigo}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@Override @DeleteMapping("/{codigo}") @ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Long codigo) {
 		fornecedorService.remover(codigo);
 	}

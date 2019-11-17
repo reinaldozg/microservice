@@ -11,6 +11,7 @@ import br.com.zenganet.core.model.cadastro.projection.FornecedorMobileProjection
 
 @Repository
 @RepositoryRestResource(excerptProjection = FornecedorMobileProjection.class)
-public interface FornecedorRepository extends JpaRepository<Fornecedor, Long> , PesquisaRepositoryQuery<Fornecedor, FornecedorFilter>{
+public interface FornecedorRepository
+		extends JpaRepository<Fornecedor, Long>, PesquisaRepositoryQuery<Fornecedor, Long, FornecedorFilter> {
 
 }

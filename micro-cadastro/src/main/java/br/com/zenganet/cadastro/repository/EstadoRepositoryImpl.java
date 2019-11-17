@@ -2,6 +2,7 @@ package br.com.zenganet.cadastro.repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -20,10 +21,16 @@ import br.com.zenganet.cadastro.repository.interfaces.PesquisaRepositoryQuery;
 import br.com.zenganet.core.model.cadastro.Estado;
 import br.com.zenganet.core.model.cadastro.filter.EstadoFilter;
 
-public class EstadoRepositoryImpl implements PesquisaRepositoryQuery<Estado, EstadoFilter>{
+public class EstadoRepositoryImpl implements PesquisaRepositoryQuery<Estado,Integer, EstadoFilter>{
 
 	@PersistenceContext
 	private EntityManager manager;
+	
+	@Override
+	public Optional<Estado> pesquisar(Integer pk) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	@Override
 	public Page<Estado> pesquisar(EstadoFilter filter, Pageable pageable) {
@@ -70,4 +77,5 @@ public class EstadoRepositoryImpl implements PesquisaRepositoryQuery<Estado, Est
 		criteria.select(builder.count(root));
 		return manager.createQuery(criteria).getSingleResult();
 	}
+
 }

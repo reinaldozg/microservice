@@ -9,6 +9,6 @@ import br.com.zenganet.core.model.cadastro.filter.ContatoFilter;
 
 
 @Repository
-public interface ContatoRepository extends JpaRepository<Contato, Long>, PesquisaRepositoryQuery<Contato, ContatoFilter>{
+public interface ContatoRepository extends JpaRepository<Contato, Long>, PesquisaRepositoryQuery<Contato,Long, ContatoFilter>{
 
 }

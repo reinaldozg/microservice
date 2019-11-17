@@ -11,6 +11,7 @@ import br.com.zenganet.core.model.cadastro.projection.ClienteMobileProjection;
 
 @Repository
 @RepositoryRestResource(excerptProjection = ClienteMobileProjection.class)
-public interface ClienteRepository extends JpaRepository<Cliente, Long>, PesquisaRepositoryQuery<Cliente, ClienteFilter> {
+public interface ClienteRepository 
+	extends JpaRepository<Cliente, Long>, PesquisaRepositoryQuery<Cliente,Long, ClienteFilter> {
 
 }

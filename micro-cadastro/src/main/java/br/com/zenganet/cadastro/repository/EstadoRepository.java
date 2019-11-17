@@ -9,6 +9,6 @@ import br.com.zenganet.core.model.cadastro.filter.EstadoFilter;
 
 @Repository
 public interface EstadoRepository
-		extends JpaRepository<Estado, Long>, PesquisaRepositoryQuery<Estado, EstadoFilter> {
+		extends JpaRepository<Estado, Integer>, PesquisaRepositoryQuery<Estado, Integer, EstadoFilter> {
 
 }

@@ -2,6 +2,7 @@ package br.com.zenganet.cadastro.repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -20,10 +21,26 @@ import br.com.zenganet.cadastro.repository.interfaces.PesquisaRepositoryQuery;
 import br.com.zenganet.core.model.cadastro.Cliente;
 import br.com.zenganet.core.model.cadastro.filter.ClienteFilter;
 
-public class ClienteRepositoryImpl implements PesquisaRepositoryQuery<Cliente, ClienteFilter> {
+public class ClienteRepositoryImpl implements PesquisaRepositoryQuery<Cliente, Long, ClienteFilter> {
 
 	@PersistenceContext
 	private EntityManager manager;
+
+	@Override
+	public Optional<Cliente> pesquisar(Long pk) {
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<Cliente> criteria = builder.createQuery(Cliente.class);
+		Root<Cliente> root = criteria.from(Cliente.class);
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		predicates.add(builder.equal(root.get("id"), pk));
+		predicates.add(builder.equal(root.get("controle").get("excluido"), false));
+
+		criteria.where(predicates.toArray(new Predicate[predicates.size()]));
+		TypedQuery<Cliente> query = manager.createQuery(criteria);
+		return query.getResultList().size() == 0 ? Optional.empty() : Optional.of(query.getSingleResult());
+	}
 
 	@Override
 	public Page<Cliente> pesquisar(ClienteFilter filter, Pageable pageable) {
@@ -64,6 +81,8 @@ public class ClienteRepositoryImpl implements PesquisaRepositoryQuery<Cliente, C
 			predicates.add(builder.like(builder.lower(root.get("nomeOuRazaoSocial")),
 					"%" + filter.getNomeOuRazaoSocial().toLowerCase() + "%"));
 		}
+
+		predicates.add(builder.equal(root.get("controle").get("excluido"), false));
 
 		return predicates.toArray(new Predicate[predicates.size()]);
 	}

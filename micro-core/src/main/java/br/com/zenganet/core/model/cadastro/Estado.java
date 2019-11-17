@@ -18,7 +18,7 @@ public class Estado implements Serializable {
 	private static final long serialVersionUID = 3416795638486368523L;
 
 	@Id
-	private int id;
+	private Integer id;
 
 	@Size(max = 2)
 	@Column(length = 2)
@@ -30,11 +30,11 @@ public class Estado implements Serializable {
 	@JoinColumn(name = "pais")
 	private Pais pais;
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

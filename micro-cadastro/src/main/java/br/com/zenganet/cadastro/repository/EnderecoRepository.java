@@ -9,6 +9,6 @@ import br.com.zenganet.core.model.cadastro.filter.EnderecoFilter;
 
 @Repository
 public interface EnderecoRepository
-		extends JpaRepository<Endereco, Long>, PesquisaRepositoryQuery<Endereco, EnderecoFilter> {
+		extends JpaRepository<Endereco, Long>, PesquisaRepositoryQuery<Endereco, Long, EnderecoFilter> {
 
 }

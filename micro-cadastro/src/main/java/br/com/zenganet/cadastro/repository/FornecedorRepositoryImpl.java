@@ -2,6 +2,7 @@ package br.com.zenganet.cadastro.repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -20,10 +21,16 @@ import br.com.zenganet.cadastro.repository.interfaces.PesquisaRepositoryQuery;
 import br.com.zenganet.core.model.cadastro.Fornecedor;
 import br.com.zenganet.core.model.cadastro.filter.FornecedorFilter;
 
-public class FornecedorRepositoryImpl implements PesquisaRepositoryQuery<Fornecedor, FornecedorFilter>{
+public class FornecedorRepositoryImpl implements PesquisaRepositoryQuery<Fornecedor,Long, FornecedorFilter>{
 
 	@PersistenceContext
 	private EntityManager manager;
+	
+	@Override
+	public Optional<Fornecedor> pesquisar(Long pk) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	@Override
 	public Page<Fornecedor> pesquisar(FornecedorFilter filter, Pageable pageable) {
@@ -79,6 +86,8 @@ public class FornecedorRepositoryImpl implements PesquisaRepositoryQuery<Fornece
 			predicates.add(builder.equal(root.get("fabricante"), filter.isFabricante()));
 		}
 		
+		predicates.add(builder.equal(root.get("controle").get("excluido"), false));
+		
 		return predicates.toArray(new Predicate[predicates.size()]);
 	}
 
@@ -99,4 +108,5 @@ public class FornecedorRepositoryImpl implements PesquisaRepositoryQuery<Fornece
 		criteria.select(builder.count(root));
 		return manager.createQuery(criteria).getSingleResult();
 	}
+
 }

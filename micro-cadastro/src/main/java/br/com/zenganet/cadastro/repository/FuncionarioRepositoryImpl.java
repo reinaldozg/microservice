@@ -2,6 +2,7 @@ package br.com.zenganet.cadastro.repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -20,11 +21,17 @@ import br.com.zenganet.cadastro.repository.interfaces.PesquisaRepositoryQuery;
 import br.com.zenganet.core.model.cadastro.Funcionario;
 import br.com.zenganet.core.model.cadastro.filter.FuncionarioFilter;
 
-public class FuncionarioRepositoryImpl implements PesquisaRepositoryQuery<Funcionario, FuncionarioFilter>{
+public class FuncionarioRepositoryImpl implements PesquisaRepositoryQuery<Funcionario, Long, FuncionarioFilter> {
 
 	@PersistenceContext
 	private EntityManager manager;
-	
+
+	@Override
+	public Optional<Funcionario> pesquisar(Long pk) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Override
 	public Page<Funcionario> pesquisar(FuncionarioFilter filter, Pageable pageable) {
 		CriteriaBuilder builder = manager.getCriteriaBuilder();
@@ -36,10 +43,10 @@ public class FuncionarioRepositoryImpl implements PesquisaRepositoryQuery<Funcio
 		adicionarRestricoesDePaginacao(query, pageable);
 		return new PageImpl<>(query.getResultList(), pageable, total(filter));
 	}
-	
+
 	private Predicate[] criarRestricoes(FuncionarioFilter filter, CriteriaBuilder builder, Root<Funcionario> root) {
 		List<Predicate> predicates = new ArrayList<Predicate>();
-		
+
 		if (!StringUtils.isEmpty(filter.getCnpjOuCpf())) {
 			predicates.add(builder.like(builder.lower(root.get("cnpjOuCpf")),
 					"%" + filter.getCnpjOuCpf().toLowerCase() + "%"));
@@ -64,20 +71,18 @@ public class FuncionarioRepositoryImpl implements PesquisaRepositoryQuery<Funcio
 			predicates.add(builder.like(builder.lower(root.get("nomeOuRazaoSocial")),
 					"%" + filter.getNomeOuRazaoSocial().toLowerCase() + "%"));
 		}
-		
+
 		if (!StringUtils.isEmpty(filter.getCargo())) {
-			predicates.add(builder.like(builder.lower(root.get("cargo")),
-					"%" + filter.getCargo().toLowerCase() + "%"));
+			predicates.add(builder.like(builder.lower(root.get("cargo")), "%" + filter.getCargo().toLowerCase() + "%"));
 		}
-		
+
 		if (!StringUtils.isEmpty(filter.getMatricula())) {
 			predicates.add(builder.like(builder.lower(root.get("matricula")),
 					"%" + filter.getMatricula().toLowerCase() + "%"));
 		}
-		
+
 		if (!StringUtils.isEmpty(filter.getCpts())) {
-			predicates.add(builder.like(builder.lower(root.get("cpts")),
-					"%" + filter.getCpts().toLowerCase() + "%"));
+			predicates.add(builder.like(builder.lower(root.get("cpts")), "%" + filter.getCpts().toLowerCase() + "%"));
 		}
 
 		if (!StringUtils.isEmpty(filter.getCptsSerie())) {
@@ -89,22 +94,23 @@ public class FuncionarioRepositoryImpl implements PesquisaRepositoryQuery<Funcio
 			predicates.add(builder.like(builder.lower(root.get("demissaoMotivo")),
 					"%" + filter.getDemissaoMotivo().toLowerCase() + "%"));
 		}
-		
+
 		if (!StringUtils.isEmpty(filter.getTituloInscricao())) {
 			predicates.add(builder.like(builder.lower(root.get("tituloInscricao")),
 					"%" + filter.getTituloInscricao().toLowerCase() + "%"));
 		}
 
 		if (!StringUtils.isEmpty(filter.getPis())) {
-			predicates.add(builder.like(builder.lower(root.get("pis")),
-					"%" + filter.getPis().toLowerCase() + "%"));
+			predicates.add(builder.like(builder.lower(root.get("pis")), "%" + filter.getPis().toLowerCase() + "%"));
 		}
 
 		if (!StringUtils.isEmpty(filter.getReservistaRa())) {
 			predicates.add(builder.like(builder.lower(root.get("reservistaRa")),
 					"%" + filter.getReservistaRa().toLowerCase() + "%"));
 		}
-		
+
+		predicates.add(builder.equal(root.get("controle").get("excluido"), false));
+
 		return predicates.toArray(new Predicate[predicates.size()]);
 	}
 

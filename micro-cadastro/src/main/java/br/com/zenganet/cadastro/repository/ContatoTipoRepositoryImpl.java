@@ -2,6 +2,7 @@ package br.com.zenganet.cadastro.repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -20,10 +21,16 @@ import br.com.zenganet.cadastro.repository.interfaces.PesquisaRepositoryQuery;
 import br.com.zenganet.core.model.cadastro.ContatoTipo;
 import br.com.zenganet.core.model.cadastro.filter.ContatoTipoFilter;
 
-public class ContatoTipoRepositoryImpl implements PesquisaRepositoryQuery<ContatoTipo, ContatoTipoFilter>{
+public class ContatoTipoRepositoryImpl implements PesquisaRepositoryQuery<ContatoTipo, Long, ContatoTipoFilter>{
 
 	@PersistenceContext
 	private EntityManager manager;
+	
+	@Override
+	public Optional<ContatoTipo> pesquisar(Long pk) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	@Override
 	public Page<ContatoTipo> pesquisar(ContatoTipoFilter filter, Pageable pageable) {
@@ -45,6 +52,8 @@ public class ContatoTipoRepositoryImpl implements PesquisaRepositoryQuery<Contat
 					"%" + filter.getDescricao().toLowerCase() + "%"));
 		}
 		
+		predicates.add(builder.equal(root.get("controle").get("excluido"), false));
+		
 		return predicates.toArray(new Predicate[predicates.size()]);
 	}
 
@@ -65,4 +74,6 @@ public class ContatoTipoRepositoryImpl implements PesquisaRepositoryQuery<Contat
 		criteria.select(builder.count(root));
 		return manager.createQuery(criteria).getSingleResult();
 	}
+
+
 }

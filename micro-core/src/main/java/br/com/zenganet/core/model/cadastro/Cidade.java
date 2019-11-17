@@ -16,7 +16,7 @@ public class Cidade implements Serializable {
 	private static final long serialVersionUID = 1159694615807441075L;
 
 	@Id
-	private int id;
+	private Integer id;
 
 	private String nome;
 
@@ -24,11 +24,11 @@ public class Cidade implements Serializable {
 	@JoinColumn(name = "estado")
 	private Estado estado;
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

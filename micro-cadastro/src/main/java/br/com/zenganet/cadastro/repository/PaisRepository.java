@@ -9,6 +9,6 @@ import br.com.zenganet.core.model.cadastro.filter.PaisFilter;
 
 @Repository
 public interface PaisRepository
-		extends JpaRepository<Pais, Long>, PesquisaRepositoryQuery<Pais, PaisFilter> {
+		extends JpaRepository<Pais, Integer>, PesquisaRepositoryQuery<Pais, Integer, PaisFilter> {
 
 }

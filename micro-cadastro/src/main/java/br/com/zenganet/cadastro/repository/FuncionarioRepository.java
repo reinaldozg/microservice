@@ -11,6 +11,6 @@ import br.com.zenganet.core.model.cadastro.projection.FuncionarioMobileProjectio
 
 @Repository
 @RepositoryRestResource(excerptProjection = FuncionarioMobileProjection.class)
-public interface FuncionarioRepository extends JpaRepository<Funcionario, Long>, PesquisaRepositoryQuery<Funcionario, FuncionarioFilter>{
+public interface FuncionarioRepository extends JpaRepository<Funcionario, Long>, PesquisaRepositoryQuery<Funcionario, Long, FuncionarioFilter>{
 
 }

@@ -9,6 +9,6 @@ import br.com.zenganet.core.model.cadastro.filter.CidadeFilter;
 
 @Repository
 public interface CidadeRepository
-		extends JpaRepository<Cidade, Long>, PesquisaRepositoryQuery<Cidade, CidadeFilter> {
+		extends JpaRepository<Cidade, Integer>, PesquisaRepositoryQuery<Cidade,Integer, CidadeFilter> {
 
 }

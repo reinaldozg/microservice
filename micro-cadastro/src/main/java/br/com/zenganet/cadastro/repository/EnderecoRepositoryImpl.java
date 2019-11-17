@@ -2,6 +2,7 @@ package br.com.zenganet.cadastro.repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -20,11 +21,17 @@ import br.com.zenganet.cadastro.repository.interfaces.PesquisaRepositoryQuery;
 import br.com.zenganet.core.model.cadastro.Endereco;
 import br.com.zenganet.core.model.cadastro.filter.EnderecoFilter;
 
-public class EnderecoRepositoryImpl implements PesquisaRepositoryQuery<Endereco, EnderecoFilter>{
+public class EnderecoRepositoryImpl implements PesquisaRepositoryQuery<Endereco, Long, EnderecoFilter> {
 
 	@PersistenceContext
 	private EntityManager manager;
-	
+
+	@Override
+	public Optional<Endereco> pesquisar(Long pk) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Override
 	public Page<Endereco> pesquisar(EnderecoFilter filter, Pageable pageable) {
 		CriteriaBuilder builder = manager.getCriteriaBuilder();
@@ -36,32 +43,33 @@ public class EnderecoRepositoryImpl implements PesquisaRepositoryQuery<Endereco,
 		adicionarRestricoesDePaginacao(query, pageable);
 		return new PageImpl<>(query.getResultList(), pageable, total(filter));
 	}
-	
+
 	private Predicate[] criarRestricoes(EnderecoFilter filter, CriteriaBuilder builder, Root<Endereco> root) {
 		List<Predicate> predicates = new ArrayList<Predicate>();
-				
+
 		if (!StringUtils.isEmpty(filter.getCep())) {
-			predicates.add(builder.like(builder.lower(root.get("cep")),
-					"%" + filter.getCep().toLowerCase() + "%"));
+			predicates.add(builder.like(builder.lower(root.get("cep")), "%" + filter.getCep().toLowerCase() + "%"));
 		}
-		
+
 		if (!StringUtils.isEmpty(filter.getLogradouro())) {
 			predicates.add(builder.like(builder.lower(root.get("logradouro")),
 					"%" + filter.getLogradouro().toLowerCase() + "%"));
 		}
-		
-		if (filter.getCidade()!=null) {
-			predicates.add(builder.equal(root.get("cidade"),filter.getCidade()));
+
+		if (filter.getCidade() != null) {
+			predicates.add(builder.equal(root.get("cidade"), filter.getCidade()));
 		}
-		
-		if (filter.getEnderecoTipo()!=null) {
+
+		if (filter.getEnderecoTipo() != null) {
 			predicates.add(builder.equal(root.get("enderecoTipo"), filter.getEnderecoTipo()));
 		}
-				
-		if (filter.getEstado()!=null) {
+
+		if (filter.getEstado() != null) {
 			predicates.add(builder.equal(root.get("estado"), filter.getEstado()));
 		}
-		
+
+		predicates.add(builder.equal(root.get("controle").get("excluido"), false));
+
 		return predicates.toArray(new Predicate[predicates.size()]);
 	}
 
@@ -82,4 +90,5 @@ public class EnderecoRepositoryImpl implements PesquisaRepositoryQuery<Endereco,
 		criteria.select(builder.count(root));
 		return manager.createQuery(criteria).getSingleResult();
 	}
+
 }
