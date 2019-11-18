@@ -28,8 +28,15 @@ public class CidadeRepositoryImpl implements PesquisaRepositoryQuery<Cidade, Lon
 	
 	@Override
 	public Optional<Cidade> pesquisar(Long pk) {
-		// TODO Auto-generated method stub
-		return null;
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<Cidade> criteria = builder.createQuery(Cidade.class);
+		Root<Cidade> root = criteria.from(Cidade.class);
+
+		Predicate predicate = builder.equal(root.get("id"), pk);
+		criteria.where(predicate);
+		
+		TypedQuery<Cidade> query = manager.createQuery(criteria);
+		return query.getResultList().size() == 0 ? Optional.empty() : Optional.of(query.getSingleResult());
 	}
 	
 	@Override

@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,7 +23,7 @@ public class EstadoResource implements IPesquisaResource<Estado, Integer, Estado
 	@Autowired private EstadoService service;
 	
 	@Override @GetMapping("/{codigo}")
-	public ResponseEntity<Estado> pesquisar(Integer codigo) {
+	public ResponseEntity<Estado> pesquisar(@PathVariable Integer codigo) {
 		Optional<Estado> estado = service.pesquisar(codigo);
 		return estado.isPresent() ? ResponseEntity.ok(estado.get()) : ResponseEntity.notFound().build();
 	}

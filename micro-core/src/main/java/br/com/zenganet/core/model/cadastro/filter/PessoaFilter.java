@@ -2,6 +2,8 @@ package br.com.zenganet.core.model.cadastro.filter;
 
 import java.util.Calendar;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class PessoaFilter {
 
 	private String cnpjOuCpf;
@@ -13,7 +15,8 @@ public class PessoaFilter {
 	private String nomeFantasiaOuSexo;
 
 	private String nomeOuRazaoSocial;
-
+	
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Calendar dataNascimento;
 
 	public String getCnpjOuCpf() {

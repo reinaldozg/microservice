@@ -28,8 +28,15 @@ public class PaisRepositoryImpl implements PesquisaRepositoryQuery<Pais,Integer,
 	
 	@Override
 	public Optional<Pais> pesquisar(Integer pk) {
-		// TODO Auto-generated method stub
-		return null;
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<Pais> criteria = builder.createQuery(Pais.class);
+		Root<Pais> root = criteria.from(Pais.class);
+
+		Predicate predicate = builder.equal(root.get("id"), pk);
+		criteria.where(predicate);
+		
+		TypedQuery<Pais> query = manager.createQuery(criteria);
+		return query.getResultList().size() == 0 ? Optional.empty() : Optional.of(query.getSingleResult());
 	}
 	
 	@Override

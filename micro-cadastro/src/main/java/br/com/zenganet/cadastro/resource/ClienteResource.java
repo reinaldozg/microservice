@@ -34,7 +34,7 @@ public class ClienteResource
 	implements 
 		IPesquisaResource<Cliente, Long, ClienteFilter>, 
 		ISalvaResource<Cliente, Long>,
-		IRemoveResource<Long> {
+		IRemoveResource<Long>{
 
 	@Autowired
 	private ClienteService service;
@@ -68,5 +68,6 @@ public class ClienteResource
 	public void remover(@PathVariable Long codigo) {
 		service.remover(codigo);
 	}
+	
 
 }

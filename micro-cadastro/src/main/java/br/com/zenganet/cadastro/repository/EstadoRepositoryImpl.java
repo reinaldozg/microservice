@@ -28,8 +28,15 @@ public class EstadoRepositoryImpl implements PesquisaRepositoryQuery<Estado,Inte
 	
 	@Override
 	public Optional<Estado> pesquisar(Integer pk) {
-		// TODO Auto-generated method stub
-		return null;
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<Estado> criteria = builder.createQuery(Estado.class);
+		Root<Estado> root = criteria.from(Estado.class);
+
+		Predicate predicate = builder.equal(root.get("id"), pk);
+		criteria.where(predicate);
+		
+		TypedQuery<Estado> query = manager.createQuery(criteria);
+		return query.getResultList().size() == 0 ? Optional.empty() : Optional.of(query.getSingleResult());
 	}
 	
 	@Override
