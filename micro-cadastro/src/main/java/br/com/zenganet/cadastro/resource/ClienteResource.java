@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.zenganet.cadastro.resource.interfaces.IAtivaOuDesativaResource;
+import br.com.zenganet.cadastro.resource.interfaces.IBloqueiaOuDesbloqueiaResource;
 import br.com.zenganet.cadastro.resource.interfaces.IPesquisaResource;
 import br.com.zenganet.cadastro.resource.interfaces.IRemoveResource;
 import br.com.zenganet.cadastro.resource.interfaces.ISalvaResource;
@@ -34,7 +37,9 @@ public class ClienteResource
 	implements 
 		IPesquisaResource<Cliente, Long, ClienteFilter>, 
 		ISalvaResource<Cliente, Long>,
-		IRemoveResource<Long>{
+		IRemoveResource<Long>,
+		IAtivaOuDesativaResource<Cliente, Long>,
+		IBloqueiaOuDesbloqueiaResource<Cliente, Long>{
 
 	@Autowired
 	private ClienteService service;
@@ -69,5 +74,28 @@ public class ClienteResource
 		service.remover(codigo);
 	}
 	
+	@PatchMapping("ativar/{codigo}")
+	public ResponseEntity<Cliente> ativar(@PathVariable Long codigo) {
+		Cliente clienteAtualizado = service.ativar(codigo);
+		return ResponseEntity.ok(clienteAtualizado);
+	}
+
+	@PatchMapping("desativar/{codigo}")
+	public ResponseEntity<Cliente> desativar(@PathVariable Long codigo) {
+		Cliente clienteAtualizado = service.desativar(codigo);
+		return ResponseEntity.ok(clienteAtualizado);
+	}
+
+	@PatchMapping("bloquear/{codigo}")
+	public ResponseEntity<Cliente> bloquear(@PathVariable Long codigo) {
+		Cliente clienteAtualizado = service.bloquear(codigo);
+		return ResponseEntity.ok(clienteAtualizado);
+	}
+
+	@PatchMapping("desbloquear/{codigo}")
+	public ResponseEntity<Cliente> desbloquear(@PathVariable Long codigo) {
+		Cliente clienteAtualizado = service.desbloquear(codigo);
+		return ResponseEntity.ok(clienteAtualizado);
+	}	
 
 }

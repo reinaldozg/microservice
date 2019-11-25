@@ -3,6 +3,7 @@ package br.com.zenganet.cadastro.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,16 +17,22 @@ import br.com.zenganet.core.model.cadastro.filter.PaisFilter;
 public class PaisService implements IPesquisaService<Pais, Integer, PaisFilter> {
 
 	@Autowired
-	private PaisRepository paisRepository;
-
-	@Override
-	public Optional<Pais> pesquisar(Integer pk) {
-		return paisRepository.pesquisar(pk);
-	}
+	private PaisRepository repository;
 
 	@Override
 	public Page<Pais> pesquisar(PaisFilter filter, Pageable pageable) {
-		return paisRepository.pesquisar(filter, pageable);
+		Page<Pais> pais = repository.pesquisar(filter, pageable);
+		if (pais == null || pais.isEmpty()) {throw new EmptyResultDataAccessException(1);}
+		return pais;
 	}
+	
+	@Override
+	public Optional<Pais> pesquisar(Integer pk) {
+		Optional<Pais> pais = repository.pesquisar(pk);
+		if (!pais.isPresent()) {throw new EmptyResultDataAccessException(1);}
+		return pais;
+	}
+
+
 
 }

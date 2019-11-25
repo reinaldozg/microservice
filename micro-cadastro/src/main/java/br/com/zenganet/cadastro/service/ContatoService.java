@@ -23,16 +23,20 @@ import br.com.zenganet.core.utils.DataHoraUtils;
 public class ContatoService extends AbstractValidationServiceQuery<Contato, Long> 
 implements IPesquisaService<Contato, Long, ContatoFilter>, ISalvaService<Contato, Long>, IRemoveService<Long>{
 
-	@Autowired private ContatoRepository contatoRepository;
+	@Autowired private ContatoRepository repository;
 	
 	@Override
 	public Page<Contato> pesquisar(ContatoFilter filter, Pageable pageable) {
-		return contatoRepository.pesquisar(filter, pageable);
+		Page<Contato> contato = repository.pesquisar(filter, pageable);
+		if (contato == null || contato.isEmpty()) {throw new EmptyResultDataAccessException(1);}
+		return contato;
 	}
 
 	@Override
 	public Optional<Contato> pesquisar(Long pk) {
-		return contatoRepository.pesquisar(pk);
+		Optional<Contato> contato = repository.pesquisar(pk);
+		if (!contato.isPresent()) {throw new EmptyResultDataAccessException(1);}
+		return contato;
 	}
 	
 	@Override
@@ -41,7 +45,7 @@ implements IPesquisaService<Contato, Long, ContatoFilter>, ISalvaService<Contato
 			throw new NotImplementedException("Implementar exception de inserir com informações ja existentes.");
 		}
 		entity.getControle().setDataInclusao(DataHoraUtils.getCalendarInstanceBrasil());
-		return contatoRepository.save(entity);
+		return repository.save(entity);
 	}
 
 	@Override
@@ -51,7 +55,7 @@ implements IPesquisaService<Contato, Long, ContatoFilter>, ISalvaService<Contato
 		if (!isValidaAtualizar(pk, entity)) {throw new EmptyResultDataAccessException(1);}
 		BeanUtils.copyProperties(entity, contatoSalvo.get(), ignoreFields());
 		contatoSalvo.get().getControle().setUltimaAtualizacao(DataHoraUtils.getCalendarInstanceBrasil());
-		return contatoRepository.save(contatoSalvo.get());
+		return repository.save(contatoSalvo.get());
 	}	
 	
 	@Override
@@ -61,7 +65,7 @@ implements IPesquisaService<Contato, Long, ContatoFilter>, ISalvaService<Contato
 			throw new EmptyResultDataAccessException(1);
 		}
 		contatoSalvo.get().getControle().setExcluido(true);
-		contatoRepository.save(contatoSalvo.get());
+		repository.save(contatoSalvo.get());
 		
 	}
 	

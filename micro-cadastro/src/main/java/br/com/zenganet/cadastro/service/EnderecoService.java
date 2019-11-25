@@ -3,6 +3,7 @@ package br.com.zenganet.cadastro.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,16 +17,20 @@ import br.com.zenganet.core.model.cadastro.filter.EnderecoFilter;
 public class EnderecoService implements IPesquisaService<Endereco, Long, EnderecoFilter> {
 
 	@Autowired
-	private EnderecoRepository enderecoRepository;
+	private EnderecoRepository repository;
 
 	@Override
 	public Page<Endereco> pesquisar(EnderecoFilter filter, Pageable pageable) {
-		return enderecoRepository.pesquisar(filter, pageable);
+		Page<Endereco> endereco = repository.pesquisar(filter, pageable);
+		if (endereco == null || endereco.isEmpty()) {throw new EmptyResultDataAccessException(1);}
+		return endereco;
 	}
 
 	@Override
 	public Optional<Endereco> pesquisar(Long pk) {
-		return enderecoRepository.pesquisar(pk);
+		Optional<Endereco> endereco = repository.pesquisar(pk);
+		if (!endereco.isPresent()) {throw new EmptyResultDataAccessException(1);}
+		return endereco;
 	}
 
 

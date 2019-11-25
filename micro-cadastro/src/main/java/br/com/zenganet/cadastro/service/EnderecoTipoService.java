@@ -24,16 +24,20 @@ public class EnderecoTipoService extends AbstractValidationServiceQuery<Endereco
 		implements IPesquisaService<EnderecoTipo, Long, EnderecoTipoFilter>, ISalvaService<EnderecoTipo, Long>,
 		IRemoveService<Long> {
 
-	@Autowired private EnderecoTipoRepository enderecoTipoRepository;
+	@Autowired private EnderecoTipoRepository repository;
 	
 	@Override
 	public Page<EnderecoTipo> pesquisar(EnderecoTipoFilter filter, Pageable pageable) {
-		return enderecoTipoRepository.pesquisar(filter, pageable);
+		Page<EnderecoTipo> enderecoTipo = repository.pesquisar(filter, pageable);
+		if (enderecoTipo == null || enderecoTipo.isEmpty()) {throw new EmptyResultDataAccessException(1);}
+		return enderecoTipo;
 	}
 
 	@Override
 	public Optional<EnderecoTipo> pesquisar(Long pk) {
-		return enderecoTipoRepository.pesquisar(pk);
+		Optional<EnderecoTipo> enderecoTipo = repository.pesquisar(pk);
+		if (!enderecoTipo.isPresent()) {throw new EmptyResultDataAccessException(1);}
+		return enderecoTipo;
 	}
 
 	@Override
@@ -42,7 +46,7 @@ public class EnderecoTipoService extends AbstractValidationServiceQuery<Endereco
 			throw new NotImplementedException("Implementar exception de inserir com informações ja existentes.");
 		}
 		entity.getControle().setDataInclusao(DataHoraUtils.getCalendarInstanceBrasil());
-		return enderecoTipoRepository.save(entity);
+		return repository.save(entity);
 	}
 
 	@Override
@@ -59,7 +63,7 @@ public class EnderecoTipoService extends AbstractValidationServiceQuery<Endereco
 
 		BeanUtils.copyProperties(entity, enderecoTipoSalvo.get(), ignoreFields());
 		enderecoTipoSalvo.get().getControle().setUltimaAtualizacao(DataHoraUtils.getCalendarInstanceBrasil());
-		return enderecoTipoRepository.save(enderecoTipoSalvo.get());
+		return repository.save(enderecoTipoSalvo.get());
 	}
 
 	@Override
@@ -69,7 +73,7 @@ public class EnderecoTipoService extends AbstractValidationServiceQuery<Endereco
 			throw new EmptyResultDataAccessException(1);
 		}
 		enderecoTipoSalvo.get().getControle().setExcluido(true);
-		enderecoTipoRepository.save(enderecoTipoSalvo.get());
+		repository.save(enderecoTipoSalvo.get());
 	}
 
 	@Override

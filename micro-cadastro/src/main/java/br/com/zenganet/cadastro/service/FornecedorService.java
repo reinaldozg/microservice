@@ -24,16 +24,20 @@ public class FornecedorService extends AbstractValidationServiceQuery<Fornecedor
 		IPesquisaService<Fornecedor, Long, FornecedorFilter>, ISalvaService<Fornecedor, Long>, IRemoveService<Long> {
 
 	@Autowired
-	private FornecedorRepository fornecedorRepository;
+	private FornecedorRepository repository;
 
 	@Override
 	public Page<Fornecedor> pesquisar(FornecedorFilter filter, Pageable pageable) {
-		return fornecedorRepository.pesquisar(filter, pageable);
+		Page<Fornecedor> fornecedor = repository.pesquisar(filter, pageable);
+		if (fornecedor == null || fornecedor.isEmpty()) {throw new EmptyResultDataAccessException(1);}
+		return fornecedor;
 	}
 
 	@Override
 	public Optional<Fornecedor> pesquisar(Long pk) {
-		return fornecedorRepository.pesquisar(pk);
+		Optional<Fornecedor> fornecedor = repository.pesquisar(pk);
+		if (!fornecedor.isPresent()) {throw new EmptyResultDataAccessException(1);}
+		return fornecedor;
 	}
 
 	@Override
@@ -42,7 +46,7 @@ public class FornecedorService extends AbstractValidationServiceQuery<Fornecedor
 			throw new NotImplementedException("Implementar exception de inserir com informações ja existentes.");
 		}
 		entity.getControle().setDataInclusao(DataHoraUtils.getCalendarInstanceBrasil());
-		return fornecedorRepository.save(entity);
+		return repository.save(entity);
 	}
 
 	@Override
@@ -60,7 +64,7 @@ public class FornecedorService extends AbstractValidationServiceQuery<Fornecedor
 
 		BeanUtils.copyProperties(entity, fornecedorSalvo.get(), ignoreFields());
 		fornecedorSalvo.get().getControle().setUltimaAtualizacao(DataHoraUtils.getCalendarInstanceBrasil());
-		return fornecedorRepository.save(fornecedorSalvo.get());
+		return repository.save(fornecedorSalvo.get());
 	}
 
 	@Override
@@ -70,7 +74,7 @@ public class FornecedorService extends AbstractValidationServiceQuery<Fornecedor
 			throw new EmptyResultDataAccessException(1);
 		}
 		fornecedorSalvo.get().getControle().setExcluido(true);
-		fornecedorRepository.save(fornecedorSalvo.get());
+		repository.save(fornecedorSalvo.get());
 	}
 
 	@Override

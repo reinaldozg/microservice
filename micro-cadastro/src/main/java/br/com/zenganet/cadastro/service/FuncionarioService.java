@@ -25,16 +25,20 @@ public class FuncionarioService extends AbstractValidationServiceQuery<Funcionar
 		IPesquisaService<Funcionario, Long, FuncionarioFilter>, ISalvaService<Funcionario, Long>, IRemoveService<Long> {
 
 	@Autowired
-	private FuncionarioRepository funcionarioRepository;
+	private FuncionarioRepository repository;
 
 	@Override
 	public Page<Funcionario> pesquisar(FuncionarioFilter filter, Pageable pageable) {
-		return funcionarioRepository.pesquisar(filter, pageable);
+		Page<Funcionario> funcionario = repository.pesquisar(filter, pageable);
+		if (funcionario == null || funcionario.isEmpty()) {throw new EmptyResultDataAccessException(1);}
+		return funcionario;
 	}
 
 	@Override
 	public Optional<Funcionario> pesquisar(Long pk) {
-		return funcionarioRepository.pesquisar(pk);
+		Optional<Funcionario> funcionario = repository.pesquisar(pk);
+		if (!funcionario.isPresent()) {throw new EmptyResultDataAccessException(1);}
+		return funcionario;
 	}
 
 	@Override
@@ -43,7 +47,7 @@ public class FuncionarioService extends AbstractValidationServiceQuery<Funcionar
 			throw new NotImplementedException("Implementar exception de inserir com informações ja existentes.");
 		}
 		entity.getControle().setDataInclusao(DataHoraUtils.getCalendarInstanceBrasil());
-		return funcionarioRepository.save(entity);
+		return repository.save(entity);
 	}
 
 	@Override
@@ -61,7 +65,7 @@ public class FuncionarioService extends AbstractValidationServiceQuery<Funcionar
 
 		BeanUtils.copyProperties(entity, funcionarioSalvo.get(), ignoreFields());
 		funcionarioSalvo.get().getControle().setUltimaAtualizacao(DataHoraUtils.getCalendarInstanceBrasil());
-		return funcionarioRepository.save(funcionarioSalvo.get());
+		return repository.save(funcionarioSalvo.get());
 	}
 
 	@Override
@@ -71,7 +75,7 @@ public class FuncionarioService extends AbstractValidationServiceQuery<Funcionar
 			throw new EmptyResultDataAccessException(1);
 		}
 		funcionarioSalvo.get().getControle().setExcluido(true);
-		funcionarioRepository.save(funcionarioSalvo.get());
+		repository.save(funcionarioSalvo.get());
 	}
 
 	@Override

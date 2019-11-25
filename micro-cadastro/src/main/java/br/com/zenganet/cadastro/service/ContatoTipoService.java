@@ -23,16 +23,20 @@ import br.com.zenganet.core.utils.DataHoraUtils;
 public class ContatoTipoService extends AbstractValidationServiceQuery<ContatoTipo, Long>
 implements IPesquisaService<ContatoTipo, Long, ContatoTipoFilter>, ISalvaService<ContatoTipo, Long>, IRemoveService<Long> {
 
-	@Autowired private ContatoTipoRepository contatoTipoRepository;
+	@Autowired private ContatoTipoRepository repository;
 	
 	@Override
 	public Page<ContatoTipo> pesquisar(ContatoTipoFilter filter, Pageable pageable) {
-		return contatoTipoRepository.pesquisar(filter, pageable);
+		Page<ContatoTipo> contatoTipo = repository.pesquisar(filter, pageable);
+		if (contatoTipo == null || contatoTipo.isEmpty()) {throw new EmptyResultDataAccessException(1);}
+		return contatoTipo;
 	}
 
 	@Override
 	public Optional<ContatoTipo> pesquisar(Long pk) {
-		return contatoTipoRepository.pesquisar(pk);
+		Optional<ContatoTipo> contatoTipo = repository.pesquisar(pk);
+		if (!contatoTipo.isPresent()) {throw new EmptyResultDataAccessException(1);}
+		return contatoTipo;
 	}
 	
 	@Override
@@ -41,7 +45,7 @@ implements IPesquisaService<ContatoTipo, Long, ContatoTipoFilter>, ISalvaService
 			throw new NotImplementedException("Implementar exception de inserir com informações ja existentes.");
 		}
 		entity.getControle().setDataInclusao(DataHoraUtils.getCalendarInstanceBrasil());
-		return contatoTipoRepository.save(entity);
+		return repository.save(entity);
 	}
 
 	@Override
@@ -58,7 +62,7 @@ implements IPesquisaService<ContatoTipo, Long, ContatoTipoFilter>, ISalvaService
 
 		BeanUtils.copyProperties(entity, contatoTipoSalvo.get(), ignoreFields());
 		contatoTipoSalvo.get().getControle().setUltimaAtualizacao(DataHoraUtils.getCalendarInstanceBrasil());
-		return contatoTipoRepository.save(contatoTipoSalvo.get());
+		return repository.save(contatoTipoSalvo.get());
 	}
 
 	@Override
@@ -68,7 +72,7 @@ implements IPesquisaService<ContatoTipo, Long, ContatoTipoFilter>, ISalvaService
 			throw new EmptyResultDataAccessException(1);
 		}
 		contatoTipoSalvo.get().getControle().setExcluido(true);
-		contatoTipoRepository.save(contatoTipoSalvo.get());
+		repository.save(contatoTipoSalvo.get());
 		
 	}
 
