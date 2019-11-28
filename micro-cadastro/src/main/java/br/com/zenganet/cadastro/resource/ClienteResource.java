@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -57,13 +58,13 @@ public class ClienteResource
 	}
 
 	@Override @PostMapping
-	public ResponseEntity<Cliente> inserir(@Valid @RequestBody Cliente cliente, HttpServletResponse response) {
+	public ResponseEntity<Cliente> inserir(@Valid @RequestBody Cliente cliente, BindingResult result, HttpServletResponse response) {
 		Cliente entitySalvo = service.inserir(cliente);
 		return ResponseEntity.status(HttpStatus.CREATED).body(entitySalvo);
 	}
 
 	@Override @PutMapping("/{codigo}")
-	public ResponseEntity<Cliente> atualizar(@PathVariable Long codigo, @Valid @RequestBody Cliente cliente,
+	public ResponseEntity<Cliente> atualizar(@PathVariable Long codigo, @Valid @RequestBody Cliente cliente, BindingResult result,
 			HttpServletResponse response) {
 		Cliente clienteAtualizado = service.atualizar(codigo, cliente);
 		return ResponseEntity.ok(clienteAtualizado);

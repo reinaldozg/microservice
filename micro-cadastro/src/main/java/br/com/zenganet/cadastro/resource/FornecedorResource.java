@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,13 +52,13 @@ public class FornecedorResource
 	}
 	
 	@Override @PostMapping	
-	public ResponseEntity<Fornecedor> inserir(@Valid @RequestBody Fornecedor fornecedor, HttpServletResponse response) {
+	public ResponseEntity<Fornecedor> inserir(@Valid @RequestBody Fornecedor fornecedor, BindingResult result, HttpServletResponse response) {
 		Fornecedor entitySalvo = fornecedorService.inserir(fornecedor);		
 		return ResponseEntity.status(HttpStatus.CREATED).body(entitySalvo);
 	}
 
 	@Override @PutMapping("/{codigo}")
-	public ResponseEntity<Fornecedor> atualizar(@PathVariable Long codigo, @Valid @RequestBody Fornecedor fornecedor,	HttpServletResponse response) {
+	public ResponseEntity<Fornecedor> atualizar(@PathVariable Long codigo, @Valid @RequestBody Fornecedor fornecedor, BindingResult result, HttpServletResponse response) {
 		Fornecedor fornecedorAtualizado = fornecedorService.atualizar(codigo, fornecedor);
 		return ResponseEntity.ok(fornecedorAtualizado);
 	}

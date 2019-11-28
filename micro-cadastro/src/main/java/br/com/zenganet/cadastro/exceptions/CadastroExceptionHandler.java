@@ -1,4 +1,4 @@
-package br.com.zenganet.core.exceptions;
+package br.com.zenganet.cadastro.exceptions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,7 +24,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
-public class CoreExceptionHandler extends ResponseEntityExceptionHandler{
+public class CadastroExceptionHandler extends ResponseEntityExceptionHandler{
 
 	@Autowired
 	private MessageSource messageSource;

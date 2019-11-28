@@ -14,10 +14,9 @@ spring:
 # Database
    datasource:
       driver-class-name: org.postgresql.Driver
-      url: jdbc:postgresql://192.168.1.10:5432/micro-cadastro
+      url: jdbc:postgresql://172.28.21.254:5432/micro-cadastro
       username: postgres
-      password: "*production*@"
-
+      password: admin
 
 # JPA properties
    jpa:
@@ -49,7 +48,6 @@ logging:
 
 server:
    port: 8085
-   sessionTimeout: 30
    servlet:
       contextPath: /cadastro
    
